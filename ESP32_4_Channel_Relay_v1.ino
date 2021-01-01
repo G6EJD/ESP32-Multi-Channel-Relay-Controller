@@ -73,7 +73,7 @@ const char* Timezone   = "GMT0BST,M3.5.0/01,M10.5.0/02";
 
 // System values
 String sitetitle            = "4-Channel Relay Controller";
-String Year                 = "2020";     // For the footer line
+String Year                 = "2021";     // For the footer line
 
 bool   ManualOverride       = false;      // Manual override
 String Units                = "M";        // or Units = "I" for °F and 12:12pm time format
