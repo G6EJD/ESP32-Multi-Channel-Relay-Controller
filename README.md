@@ -9,13 +9,13 @@ The system provides a web-user interface showing system summary, 4 channel timer
 Access the controller with either the IP Address shown on the serial monitor or use http://controller.local/
 
 Example Home Screen:
-![alt_text, width="200"](/Image1.JPG)
+![alt_text, width="200"](/Image1.jpg)
 
 Example Timer Setup Page (1 of 4):
-![alt_text, width="200"](/Image2.JPG)
+![alt_text, width="200"](/Image2.jpg)
 
 Example Setup Page:
-![alt_text, width="200"](/Image3.JPG)
+![alt_text, width="200"](/Image3.jpg)
 
 
 
