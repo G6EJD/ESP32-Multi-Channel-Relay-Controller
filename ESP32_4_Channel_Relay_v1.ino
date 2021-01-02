@@ -35,16 +35,17 @@ const char* ServerName = "Controller"; // Connect to the server with http://cont
 #define ON              true           // Set the Relay ON
 #define OFF             false          // Set the Relay OFF
 #define Channel1        0              // Define Channel-1
-#define Channel2        1              // Define the Relay Control pin
-#define Channel3        2              // Define the Relay Control pin
-#define Channel4        3              // Define the Relay Control pin
+#define Channel2        1              // Define Channel-2
+#define Channel3        2              // Define Channel-3
+#define Channel4        3              // Define Channel-4
+// Now define the GPIO pins to be used for relay control
 #define Channel1_Pin    0              // Define the Relay Control pin
 #define Channel2_Pin    2              // Define the Relay Control pin
 #define Channel3_Pin    13             // Define the Relay Control pin
 #define Channel4_Pin    14             // Define the Relay Control pin
 
 #define LEDPIN          5              // Define the LED Control pin
-#define ChannelReverse  true           // Set to true for Relay that requires a signal HIGH for ON, usually relays need a LOW to actuate
+#define ChannelReverse  false          // Set to true for Relay that requires a signal HIGH for ON, usually relays need a LOW to actuate
 
 struct settings {
   String DoW;                          // Day of Week for the programmed event
@@ -235,11 +236,10 @@ void Homepage() {
   webpage += " <td>Channel-3</td>";
   webpage += " <td>Channel-4</td>";
   webpage += "</tr>";
-  webpage += "<tr>";
-  webpage += " <td><div class='c1 Circle'><span class=" + String((Channel1_State == "ON" ? "'on'>" : "'off'>")) + String(Channel1_State) + "</span></div></td>";
-  webpage += " <td><div class='c2 Circle'><span class=" + String((Channel2_State == "ON" ? "'on'>" : "'off'>")) + String(Channel2_State) + "</span></div></td>";
-  webpage += " <td><div class='c3 Circle'><span class=" + String((Channel3_State == "ON" ? "'on'>" : "'off'>")) + String(Channel3_State) + "</span></div></td>";
-  webpage += " <td><div class='c4 Circle'><span class=" + String((Channel4_State == "ON" ? "'on'>" : "'off'>")) + String(Channel4_State) + "</span></div><br></td>";
+  webpage += " <td><div class='c1 Circle'><a class='" + String((Channel1_State == "ON" ? "on'" : "off'")) + " href='/timer1'>" + String(Channel1_State) + "</a></div></td>";
+  webpage += " <td><div class='c2 Circle'><a class='" + String((Channel2_State == "ON" ? "on'" : "off'")) + " href='/timer2'>" + String(Channel2_State) + "</a></div></td>";
+  webpage += " <td><div class='c3 Circle'><a class='" + String((Channel3_State == "ON" ? "on'" : "off'")) + " href='/timer3'>" + String(Channel3_State) + "</a></div></td>";
+  webpage += " <td><div class='c4 Circle'><a class='" + String((Channel4_State == "ON" ? "on'" : "off'")) + " href='/timer4'>" + String(Channel4_State) + "</a></div></td>";
   webpage += "</tr>";
   webpage += "</table>";
   webpage += "<br>";
@@ -453,8 +453,8 @@ void append_HTML_header(bool refreshMode) {
   webpage += ".centre          {margin-left:auto;margin-right:auto;}";
   webpage += "h2               {margin-top:0.3em;margin-bottom:0.3em;font-size:1.4em;}";
   webpage += "h3               {margin-top:0.3em;margin-bottom:0.3em;font-size:1.2em;}";
-  webpage += ".on              {color:red;}";
-  webpage += ".off             {color:limegreen;}";
+  webpage += ".on              {color:red;text-decoration:none;}";
+  webpage += ".off             {color:limegreen;text-decoration:none;}";
   webpage += ".topnav          {overflow: hidden;background-color:lightcyan;}";
   webpage += ".topnav a        {float:left;color:blue;text-align:center;padding:1em 1.14em;text-decoration:none;font-size:1.3em;}";
   webpage += ".topnav a:hover  {background-color:deepskyblue;color:white;}";
