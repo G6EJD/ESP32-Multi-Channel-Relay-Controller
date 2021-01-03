@@ -236,6 +236,7 @@ void Homepage() {
   webpage += " <td>Channel-3</td>";
   webpage += " <td>Channel-4</td>";
   webpage += "</tr>";
+  webpage += "<tr>";
   webpage += " <td><div class='c1 Circle'><a class='" + String((Channel1_State == "ON" ? "on'" : "off'")) + " href='/timer1'>" + String(Channel1_State) + "</a></div></td>";
   webpage += " <td><div class='c2 Circle'><a class='" + String((Channel2_State == "ON" ? "on'" : "off'")) + " href='/timer2'>" + String(Channel2_State) + "</a></div></td>";
   webpage += " <td><div class='c3 Circle'><a class='" + String((Channel3_State == "ON" ? "on'" : "off'")) + " href='/timer3'>" + String(Channel3_State) + "</a></div></td>";
@@ -243,7 +244,7 @@ void Homepage() {
   webpage += "</tr>";
   webpage += "</table>";
   webpage += "<br>";
-  webpage += "<h3>Channel Schedule Summary</h3>";
+  webpage += "<h3>Summary of Channel Schedules</h3>";
   webpage += "<table class='centre sum'>";
   webpage += "<tr>";
   webpage += "<td>Time</td>";
@@ -264,10 +265,10 @@ void Homepage() {
     webpage += "<tr>";
     webpage += "<td>" + String((timer / 2 < 10 ? "0" : "")) + String(timer / 2) + ":" + String(((timer % 2) * 30) < 10 ? "0" : "") + String((timer % 2) * 30) + "</td>"; // 4 x 15-min intervals per hour
     for (byte DoW = 0; DoW < 7; DoW++) {
-      webpage += "<td bgcolor='" + String(TimerSummary[0][DoW][timer] ? "yellow" : "cyan") + "'></td>";
-      webpage += "<td bgcolor='" + String(TimerSummary[1][DoW][timer] ? "orange" : "cyan") + "'></td>";
-      webpage += "<td bgcolor='" + String(TimerSummary[2][DoW][timer] ? "red"    : "cyan") + "'></td>";
-      webpage += "<td bgcolor='" + String(TimerSummary[3][DoW][timer] ? "pink"   : "cyan") + "'></td>";
+      webpage += "<td class='" + String(TimerSummary[0][DoW][timer] ? "c1on" : "coff") + "'></td>";
+      webpage += "<td class='" + String(TimerSummary[1][DoW][timer] ? "c2on" : "coff") + "'></td>";
+      webpage += "<td class='" + String(TimerSummary[2][DoW][timer] ? "c3on" : "coff") + "'></td>";
+      webpage += "<td class='" + String(TimerSummary[3][DoW][timer] ? "c4on" : "coff") + "'></td>";
     }
     webpage += "</tr>";
   }
@@ -336,29 +337,29 @@ void TimerSet(int channel) {
 void Setup() {
   append_HTML_header(noRefresh);
   webpage += "<h2>Channel Setup</h2><br>";
-  webpage += "<h3>Enter required values</h3><br>";
+  webpage += "<h3>Enter required values</h3>";
   webpage += "<FORM action='/handlesetup'>";
   webpage += "<table class='centre'>";
   webpage += "<tr>";
   webpage += "<td>Setting</td><td>Value</td>";
   webpage += "</tr>";
   webpage += "<tr>";
-  webpage += "<td><label for='manualoveride1'>Channel-1 Manual Override </label></td>";
+  webpage += "<td><label>Channel-1 Manual Override </label></td>";
   webpage += "<td><select name='manualoverride1'><option value='ON'>ON</option>";
   webpage += "<option selected value='OFF'>OFF</option></select></td>"; // ON/OFF
   webpage += "</tr>";
   webpage += "<tr>";
-  webpage += "<td><label for='manualoveride2'>Channel-2 Manual Override </label></td>";
+  webpage += "<td><label>Channel-2 Manual Override </label></td>";
   webpage += "<td><select name='manualoverride2'><option value='ON'>ON</option>";
   webpage += "<option selected value='OFF'>OFF</option></select></td>"; // ON/OFF
   webpage += "</tr>";
   webpage += "<tr>";
-  webpage += "<td><label for='manualoveride3'>Channel-3 Manual Override </label></td>";
+  webpage += "<td><label>Channel-3 Manual Override </label></td>";
   webpage += "<td><select name='manualoverride3'><option value='ON'>ON</option>";
   webpage += "<option selected value='OFF'>OFF</option></select></td>"; // ON/OFF
   webpage += "</tr>";
   webpage += "<tr>";
-  webpage += "<td><label for='manualoveride4'>Channel-4 Manual Override </label></td>";
+  webpage += "<td><label>Channel-4 Manual Override </label></td>";
   webpage += "<td><select name='manualoverride4'><option value='ON'>ON</option>";
   webpage += "<option selected value='OFF'>OFF</option></select></td>"; // ON/OFF
   webpage += "</tr>";
@@ -372,24 +373,31 @@ void Help() {
   append_HTML_header(noRefresh);
   webpage += "<h2>Help</h2><br>";
   webpage += "<div style='text-align: left;font-size:1.1em;'>";
-  webpage += "<br><u><b>Setup Menu</b></u>";
-  webpage += "<p><i>Manual Override</i> - switch a channel(s) on until a scheduled timed period comes into effect.</p>";
-  webpage += "<u><b>Schedule Menu</b></u>";
-  webpage += "<p>Determines the Channel switch ON and OFF time for each day of the week and up to 4 events per day. ";
-  webpage += "To set a channel to come on at 06:00 and go off at 09:00 enter the required start/end times. ";
-  webpage += "Repeat for each day of the week and event within the day to get a Channel profile.</p>";
+  webpage += "<br><u><b>Status Page</b></u>";
+  webpage += "<p>Provides a channel overview showing either On or OFF for each channel, READ for ON and GREEN for OFF.</p>";
+  webpage += "<p>Each position has a link to the Channel's timer settings, so clicking on Channel-2 'ON' or 'OFF' goes to the channel's timer settings page.</p>";
+  webpage += "<p>The weekly summary shows 4-channels per day, from 00:00 to 23:30 using the channel's colour to indicate if it is scheduled to be ON.</p>";
+  webpage += "<p>NOTE: the minimum time period that can be displayed is 30-minutes. e.g. 12:05 to 12:20 won't be displayed, but 12:00 to 12:20 will be.</p>";
+  webpage += "<p>This is becuase the minimum resolution is 30-mins for the summary, this does not affect the timing accuracy.</p>";
+  webpage += "<br><u><b>Channel Setting 1 to 4</b></u>";
+  webpage += "<p>Each channel can be set for 7-days per week with up-to 4-periods per day.</p>";
+  webpage += "<p>You can either use a single slot to switch the channel ON between e.g. 09:00 and 13:00</p>";
+  webpage += "<p>or you could set period-1 from 09:00 to 10:00; period-2 from 10:00 to 11:00; period-3 from 11:00 to 12:00 and period-4 from 12:00 to 13:00</p>";
+  webpage += "<u><b>Setup Page</b></u>";
+  webpage += "<p>Enables a channel(s) to be overridden to ON, but only until a valid schedule period comes into effect.</p>";
+  webpage += "<p>The manual-override is cleared when a valid timer period begins.</p>";
   webpage += "</div>";
   append_HTML_footer();
 }
 //#########################################################################################
 void CheckTimerEvent() {
   String TimeNow;
-  TimeNow        = ConvertUnixTime(UnixTime);            // Get the current time e.g. 15:35
-  Channel1_State = "OFF";                                // Switch Channel OFF until the schedule decides otherwise
-  Channel2_State = "OFF";                                // Switch Channel OFF until the schedule decides otherwise
-  Channel3_State = "OFF";                                // Switch Channel OFF until the schedule decides otherwise
-  Channel4_State = "OFF";                                // Switch Channel OFF until the schedule decides otherwise
-  if (Channel1_Override) {                               // If manual override is requested then turn the Channel on
+  TimeNow        = ConvertUnixTime(UnixTime);           // Get the current time e.g. 15:35
+  Channel1_State = "OFF";                               // Switch Channel OFF until the schedule decides otherwise
+  Channel2_State = "OFF";                               // Switch Channel OFF until the schedule decides otherwise
+  Channel3_State = "OFF";                               // Switch Channel OFF until the schedule decides otherwise
+  Channel4_State = "OFF";                               // Switch Channel OFF until the schedule decides otherwise
+  if (Channel1_Override) {                              // If manual override is requested then turn the Channel on
     Channel1_State = "ON";
     ActuateChannel(ON, Channel1, Channel1_Pin);         // Switch Channel ON if requested
   }
@@ -449,33 +457,38 @@ void append_HTML_header(bool refreshMode) {
   if (refreshMode) webpage += "<meta http-equiv='refresh' content='5'>"; // 5-secs refresh time, test needed to prevent auto updates repeating some commands
   webpage += "<script src=\"https://code.jquery.com/jquery-3.2.1.min.js\"></script>";
   webpage += "<style>";
-  webpage += "body             {width:68em;margin-left:auto;margin-right:auto;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:blue;background-color:#e1e1ff;text-align:center;}";
-  webpage += ".centre          {margin-left:auto;margin-right:auto;}";
-  webpage += "h2               {margin-top:0.3em;margin-bottom:0.3em;font-size:1.4em;}";
-  webpage += "h3               {margin-top:0.3em;margin-bottom:0.3em;font-size:1.2em;}";
-  webpage += ".on              {color:red;text-decoration:none;}";
-  webpage += ".off             {color:limegreen;text-decoration:none;}";
-  webpage += ".topnav          {overflow: hidden;background-color:lightcyan;}";
-  webpage += ".topnav a        {float:left;color:blue;text-align:center;padding:1em 1.14em;text-decoration:none;font-size:1.3em;}";
-  webpage += ".topnav a:hover  {background-color:deepskyblue;color:white;}";
+  webpage += "body {width:68em;margin-left:auto;margin-right:auto;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:blue;background-color:#e1e1ff;text-align:center;}";
+  webpage += ".centre {margin-left:auto;margin-right:auto;}";
+  webpage += "h2 {margin-top:0.3em;margin-bottom:0.3em;font-size:1.4em;}";
+  webpage += "h3 {margin-top:0.3em;margin-bottom:0.3em;font-size:1.2em;}";
+  webpage += ".on {color:red;text-decoration:none;}";
+  webpage += ".off {color:limegreen;text-decoration:none;}";
+  webpage += ".topnav {overflow: hidden;background-color:lightcyan;}";
+  webpage += ".topnav a {float:left;color:blue;text-align:center;padding:1em 1.14em;text-decoration:none;font-size:1.3em;}";
+  webpage += ".topnav a:hover {background-color:deepskyblue;color:white;}";
   webpage += ".topnav a.active {background-color:lightblue;color:blue;}";
-  webpage += "table.timer tr   {padding:0.2em 0.5em 0.2em 0.5em;font-size:1.0em;}";
-  webpage += "table.timer td   {padding:0.2em 0.5em 0.2em 0.5em;font-size:1.0em;}";
-  webpage += "table.sum tr     {padding:0.2em 0.5em 0.2em 0.5em;font-size:1.1em;border:1px solid blue;}";
-  webpage += "table.sum td     {padding:0.2em 0.6em 0.2em 0.6em;font-size:1.1em;border:1px solid blue;}";
-  webpage += "col:first-child  {background:lightcyan}col:nth-child(2){background:#CCC}col:nth-child(8){background:#CCC}";
-  webpage += "tr:first-child   {background:lightcyan}";
-  webpage += ".medium          {font-size:1.4em;padding:0;margin:0}";
-  webpage += ".ps              {font-size:0.7em;padding:0;margin:0}";
-  webpage += "footer           {padding:0.08em;background-color:cyan;font-size:1.1em;}";
-  webpage += ".Circle          {border-radius:50%;width:2.7em;height:2.7em;padding:0.2em;text-align:center;font-size:3em;display:inline-flex;justify-content:center;align-items:center;}";
-  webpage += ".c1              {border:0.11em solid yellow;}";
-  webpage += ".c2              {border:0.11em solid orange;}";
-  webpage += ".c3              {border:0.11em solid red;}";
-  webpage += ".c4              {border:0.11em solid pink;}";
-  webpage += ".wifi            {padding:3px;position:relative;top:1em;left:0.36em;}";
+  webpage += "table.timer tr {padding:0.2em 0.5em 0.2em 0.5em;font-size:1.1em;}";
+  webpage += "table.timer td {padding:0.2em 0.5em 0.2em 0.5em;font-size:1.1em;}";
+  webpage += "table.sum tr {padding:0.2em 0.5em 0.2em 0.5em;font-size:1.1em;border:1px solid blue;}";
+  webpage += "table.sum td {padding:0.2em 0.6em 0.2em 0.6em;font-size:1.1em;border:1px solid blue;}";
+  webpage += "col:first-child {background:lightcyan}col:nth-child(2){background:#CCC}col:nth-child(8){background:#CCC}";
+  webpage += "tr:first-child {background:lightcyan}";
+  webpage += ".medium {font-size:1.4em;padding:0;margin:0}";
+  webpage += ".ps {font-size:0.7em;padding:0;margin:0}";
+  webpage += "footer {padding:0.08em;background-color:cyan;font-size:1.1em;}";
+  webpage += ".Circle {border-radius:50%;width:2.7em;height:2.7em;padding:0.2em;text-align:center;font-size:3em;display:inline-flex;justify-content:center;align-items:center;}";
+  webpage += ".c1 {border:0.15em solid yellow;background-color:lightgray;}";
+  webpage += ".c2 {border:0.15em solid orange;background-color:lightgray;}";
+  webpage += ".c3 {border:0.15em solid red;background-color:lightgray;}";
+  webpage += ".c4 {border:0.15em solid pink;background-color:lightgray;}";
+  webpage += ".coff {background-color:gainsboro;}";
+  webpage += ".c1on {background-color:yellow;}";
+  webpage += ".c2on {background-color:orange;}";
+  webpage += ".c3on {background-color:red;}";
+  webpage += ".c4on {background-color:pink;}";
+  webpage += ".wifi {padding:3px;position:relative;top:1em;left:0.36em;}";
   webpage += ".wifi, .wifi:before {display:inline-block;border:9px double transparent;border-top-color:currentColor;border-radius:50%;}";
-  webpage += ".wifi:before     {content:'';width:0;height:0;}";
+  webpage += ".wifi:before {content:'';width:0;height:0;}";
   webpage += "</style></head>";
   webpage += "<body>";
   webpage += "<div class='topnav'>";
@@ -654,6 +667,6 @@ String WiFiSignal() {
 }
 
 /*
-   Version 2.0 654 lines of code
+   Version 1.0 667 lines of code
    All HTML fully validated by W3C
 */
