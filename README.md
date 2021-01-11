@@ -8,6 +8,8 @@ The system provides a web-user interface showing system summary, 4 channel timer
 
 Access the controller with either the IP Address shown on the serial monitor or use http://controller.local/
 
+Version 1.1 now shows current time in status heading; Channel-n has been changed to Timer-n; Setup changed to Override
+
 Example Home Screen:
 
 ![alt_text, width="200"](/Image1.jpg)
